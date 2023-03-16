@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Exercise List for <%= muscle %> with <%= equipment %></h1>
+    <a href="/muscle/<%= muscle %>">Return to <%= muscle %></a>
+    <br>
+    <br>
+    <% exerciseNames.forEach(function(i) { %>
+        <li>
+            <%= i %>
+        </li>
+    <% }) %>
+    <br>
+    <button >Add Exercise</button>
+    <form action="/muscle/exercise" method="POST">
+        <input type="text" placeholder="Enter exercise here" name="newExercise">
+        <input type="submit">
+    </form>
+</body>
+</html>

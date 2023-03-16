@@ -11,9 +11,8 @@
     <a href="/">Home Page</a>
     <p>
         <% muscle.forEach(function(i) { %>
-            <li>
-            <%= i.muscle %>
-            <%= i.equipment %>
+            <li> 
+                <a href="/muscle/<%= i.muscle %>"><%= i.muscle %></a> 
             </li>
         <% }); %>   
     </p>
