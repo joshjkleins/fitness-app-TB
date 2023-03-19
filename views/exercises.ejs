@@ -17,9 +17,9 @@
         </li>
     <% }) %>
     <br>
-    <button >Add Exercise</button>
-    <form action="/muscle/exercise" method="POST">
-        <input type="text" placeholder="Enter exercise here" name="newExercise">
+    <p>Add Exercise<p>
+    <form action="/muscle/<%= muscle %>/<%= equipment %>/addExercise" method="POST">
+        <input type="text" placeholder="Enter exercise here" name="newExercise" required>
         <input type="submit">
     </form>
 </body>

@@ -18,48 +18,7 @@ router.get('/', function(req, res) {
     
 })
 
-// Equipement form post
-router.post('/', function(req, res){ 
-    if (req.body.equipmentName == '' || req.body.muscle == '') {
-        //request user to enter a string
-        console.log('Null input was rejected!')
-        return res.redirect('/')
-    }
-    // update equipment string to array
-    const equipment = req.body.equipmentName.toLowerCase().trim()
-    const muscle = req.body.muscle.toLowerCase().trim()
-    const equipmentArray = equipment.split(', ')
-
-    // make db document object
-    const equipmentObject = {
-        muscle: muscle,
-        equipment: equipmentArray
-    }
-    
-    async function addingExercise() {
-        // connect to database
-        const client = await MongoClient.connect(process.env.MDBURL, { useUnifiedTopology: true })
-        
-        // get correct database and collection
-        const dbName = client.db('Fitness')
-        const collection = dbName.collection('Equipment')
-
-        // setting a database query to a variable to see if muscle already exists in database 
-        const result = await collection.findOne({muscle: muscle})
-        // if no result exists, insert new muscle into database
-        if (result == null) {
-            collection.insertOne(equipmentObject).then(result => {
-                console.log(result)
-                res.redirect('/')
-            })
-        } else {
-            console.log(muscle + ' is already in database')
-            res.redirect('/')
-        }
-    }
-    addingExercise()
-})
-
+// sends list of the db muscles to the client 
 router.get('/:muscle', (req, res) => {
     async function getEquipmentForMuscle() {
         const client = await MongoClient.connect(process.env.MDBURL, { useUnifiedTopology: true })
@@ -88,6 +47,7 @@ router.get('/:muscle', (req, res) => {
     
 })
 
+// sends the list of equipment for a muscle to the client after selecting a muscle
 router.get('/:muscle/:equipment', (req, res) => {
     async function getExercises() {
         const client = await MongoClient.connect(process.env.MDBURL, { useUnifiedTopology: true })
@@ -101,12 +61,22 @@ router.get('/:muscle/:equipment', (req, res) => {
             equipment: req.params.equipment
         })
         if (result == null) {
+            // check if database has muscle/equipment/exerciseNames entry in collection; if not, create one 
+            const newExerciseNameObject = {
+            muscle: req.params.muscle,
+            equipment: req.params.equipment,
+            exerciseNames: []
+            }
+            await collection.insertOne(newExerciseNameObject)
+            console.log(`I created a new document for ${req.params.muscle} and ${req.params.equipment} `)
             res.render("exercises", {
                 muscle: req.params.muscle,
                 equipment: req.params.equipment,
-                exerciseNames: ''
-            }) 
+                exerciseNames: []
+            })
+            return res.redirect('/muscle/'+req.params.muscle+"/"+req.params.equipment)
         } else {
+            // if muscle/equipment already exists in db, load it 
             res.render("exercises", {
                 muscle: req.params.muscle,
                 equipment: req.params.equipment,
@@ -117,13 +87,50 @@ router.get('/:muscle/:equipment', (req, res) => {
     getExercises()
 })
 
-router.post('/exercise', (req, res) => {
-    console.log(req.body.newExercise)
-    // connect to the db
-    // query the muscle and equipment 
-    // 
-    // if array is empty, add exercise to array 
+// adds a new exercise to a muscle/equipment 
+router.post('/:muscle/:equipment/addExercise', (req, res) => {
+    
+    if (req.body.newExercise == '') {
+        //request user to enter a string
+        console.log('Null input was rejected!')
+        return res.redirect('/:muscle/:equipment')
+    }
+    // define newExercise 
+    const addExercise = req.body.newExercise.toLowerCase().trim()
+    console.log(addExercise)
 
+    async function addingExercise() {
+        // connect to database
+        const client = await MongoClient.connect(process.env.MDBURL, { useUnifiedTopology: true })
+        
+        // get correct database and collection
+        const dbName = client.db('Fitness')
+        const collection = dbName.collection('Exercises')
+               
+        // if muscle/equipment/exerciseName document exists, check to see if exerciseName already exists 
+        const result = await collection.findOne({
+            muscle: req.params.muscle,
+            equipment: req.params.equipment,
+            exerciseNames: addExercise,
+        })
+        
+        // if exerciseName does not exist, add it to the array
+        if (result == null) {
+            const addedExerciseName = await collection.updateOne({
+                muscle: req.params.muscle,
+                equipment: req.params.equipment,}, 
+                {$push: { 'exerciseNames': addExercise}
+            })
+            console.log(addedExerciseName)
+            res.redirect('/muscle/'+req.params.muscle+"/"+req.params.equipment)
+        } 
+        // if the exerciseName exists, redirect 
+        else {
+            console.log(`${addExercise} already exists in the database`)
+            return res.redirect('/muscle/'+req.params.muscle+"/"+req.params.equipment)
+        }
+    }
+    addingExercise()
 })
 
 module.exports = router
