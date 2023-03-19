@@ -60,12 +60,13 @@ router.get('/:muscle/:equipment', (req, res) => {
             muscle: req.params.muscle,
             equipment: req.params.equipment
         })
+
         if (result == null) {
             // check if database has muscle/equipment/exerciseNames entry in collection; if not, create one 
             const newExerciseNameObject = {
-            muscle: req.params.muscle,
-            equipment: req.params.equipment,
-            exerciseNames: []
+                muscle: req.params.muscle,
+                equipment: req.params.equipment,
+                exerciseNames: []
             }
             await collection.insertOne(newExerciseNameObject)
             console.log(`I created a new document for ${req.params.muscle} and ${req.params.equipment} `)
@@ -74,7 +75,7 @@ router.get('/:muscle/:equipment', (req, res) => {
                 equipment: req.params.equipment,
                 exerciseNames: []
             })
-            return res.redirect('/muscle/'+req.params.muscle+"/"+req.params.equipment)
+
         } else {
             // if muscle/equipment already exists in db, load it 
             res.render("exercises", {
