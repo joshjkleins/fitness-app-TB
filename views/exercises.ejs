@@ -6,10 +6,11 @@
 <br>
 <% exerciseNames.forEach(function(i) { %>
     <li>
-        <%= i %>
+        <%= i %> <form style='display:inline' method='post' action="/muscle/<%= muscle %>/<%= equipment %>/<%= i %>"><input type="submit" value="Delete <%= i %>"></form>
     </li>
 <% }) %>
 <br>
+
 <p>Add Exercise<p>
 <form action="/muscle/<%= muscle %>/<%= equipment %>/addExercise" method="POST">
     <input type="text" placeholder="Enter exercise here" name="newExercise" required>

@@ -86,6 +86,7 @@ router.get('/:muscle/:equipment', (req, res) => {
         }
     }
     getExercises()
+
 })
 
 // adds a new exercise to a muscle/equipment 
@@ -132,6 +133,37 @@ router.post('/:muscle/:equipment/addExercise', (req, res) => {
         }
     }
     addingExercise()
+})
+
+router.post('/:muscle/:equipment/:exercise', (req,res) => {
+    console.log('Get ready for deletion!')
+    console.log(req.params.muscle)
+    console.log(req.params.equipment)
+    console.log(req.params.exercise)
+
+    
+    async function deleteExercise() {
+        // connect to database
+        const client = await MongoClient.connect(process.env.MDBURL, { useUnifiedTopology: true })
+        
+        // get correct database and collection
+        const dbName = client.db('Fitness')
+        const collection = dbName.collection('Exercises')
+               
+        // if muscle/equipment/exerciseName document exists, check to see if exerciseName already exists 
+        const result = await collection.findOne({
+            muscle: req.params.muscle,
+            equipment: req.params.equipment,
+        })
+
+        const addedExerciseName = await collection.updateOne({
+            muscle: req.params.muscle,
+            equipment: req.params.equipment,}, 
+            {$pull: { 'exerciseNames': req.params.exercise}
+        })
+        res.redirect('/muscle/'+req.params.muscle+"/"+req.params.equipment)
+    }
+    deleteExercise()
 })
 
 module.exports = router
