@@ -135,12 +135,37 @@ router.post('/:muscle/:equipment/addExercise', (req, res) => {
     addingExercise()
 })
 
-router.post('/:muscle/:equipment/:exercise', (req,res) => {
-    console.log('Get ready for deletion!')
-    console.log(req.params.muscle)
-    console.log(req.params.equipment)
-    console.log(req.params.exercise)
+router.post('/:muscle/:equipment/:exercise/update', (req,res) => {
+       
+    const updateExer = req.body.update.toLowerCase().trim()
+    console.log(updateExer)
 
+    async function updateExercise() {
+        // connect to database
+        const client = await MongoClient.connect(process.env.MDBURL, { useUnifiedTopology: true })
+        
+        // get correct database and collection
+        const dbName = client.db('Fitness')
+        const collection = dbName.collection('Exercises')
+               
+        // if muscle/equipment/exerciseName document exists, check to see if exerciseName already exists 
+        const result = await collection.findOne({
+            muscle: req.params.muscle,
+            equipment: req.params.equipment,
+        })
+
+        const addedExerciseName = await collection.updateOne(
+            {muscle: req.params.muscle,
+            equipment: req.params.equipment,
+            exerciseNames: req.params.exercise},
+            { $set: {'exerciseNames.$':updateExer}})
+
+        res.redirect('/muscle/'+req.params.muscle+"/"+req.params.equipment)
+    }
+    updateExercise()
+})
+
+router.post('/:muscle/:equipment/:exercise/delete', (req,res) => {
     
     async function deleteExercise() {
         // connect to database
@@ -165,5 +190,10 @@ router.post('/:muscle/:equipment/:exercise', (req,res) => {
     }
     deleteExercise()
 })
+
+// kills all active connection is 500 connections max is met
+// const client = await MongoClient.connect(process.env.MDBURL, { useUnifiedTopology: true })
+// const dbName = client.db('Fitness')
+// dbName.runCommand( { killAllSessions: [ ] } )
 
 module.exports = router
