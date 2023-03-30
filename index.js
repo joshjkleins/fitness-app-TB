@@ -7,6 +7,7 @@ require('dotenv').config()
 app.set("view engine", "ejs");
 
 // Allows req.body data to come through
+app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // Allows for use of css file

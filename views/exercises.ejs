@@ -1,66 +1,35 @@
 <%- include('partials/header') %>
 
-<h1>Exercise List for <%= muscle %> with <%= equipment %></h1>
+<h1>Exercise List for <span id="muscle"><%= muscle %></span> with <span id="equipment"><%= equipment %></span></h1>
 <a href="/muscle/<%= muscle %>">Return to <%= muscle %></a>
 <br>
 <br>
-<% exerciseNames.forEach(function(i) { %>
+<div class="all-exercises"></div>
+<!-- <% //exerciseNames.forEach(function(i) { %>
     <li>
         
-        <%= i %> 
+        <%= //i %> 
         <div class="update-class">
-            <button id="update-button">Update <%= i %></button>        
-            <button id="stop-update">Stop updating <%= i %></button>
-            <form  method="post" id="update-form" action="/muscle/<%= muscle %>/<%= equipment %>/<%= i %>/update">
-                <input type="text" placeholder="Update <%= i %> here" name="update" required>
-                <input type="submit" value="Update <%= i %>">
+            <button id="update-button">Update <%= //i %></button>        
+            <button id="stop-update">Stop updating <%= //i %></button>
+            <form  method="post" id="update-form" action="/muscle/<%= //muscle %>/<%= //equipment %>/<%=// i %>/update">
+                <input type="text" placeholder="Update <%= //i %> here" name="update" required>
+                <input type="submit" value="Update <%= //i %>">
             </form> 
         </div>
-        <form style='display:inline' id="add-exercise" method='post' action="/muscle/<%= muscle %>/<%= equipment %>/<%= i %>/delete"><input type="submit" value="Delete <%= i %>"></form>
+        <form style='display:inline' id="add-exercise" method='post' action="/muscle/<%= //muscle %>/<%= //equipment %>/<%= //i %>/delete"><input type="submit" value="Delete <%= //i %>"></form>
         
     </li>
     
-<% }) %>
+<%// }) %> -->
 <br>
-<script>
-
-const updateClass = document.querySelectorAll('.update-class')
-const updateButtons = document.querySelectorAll('#update-button')
-const hideForm = document.querySelectorAll('#update-form')
-const stopUpdate = document.querySelectorAll('#stop-update')
-
-updateClass.forEach(function(i, index) {
-    i.children[1].style.display = 'none'
-    i.children[2].style.display = 'none'
-})
-
-// if update button is clicked, hide "update button" and show form and "stop update button"
-updateButtons.forEach(function(i, index) {
-    const x = index
-    i.addEventListener('click', () => {   
-        console.log('button was clicked')
-        updateButtons[x].style.display = 'none'
-        hideForm[x].style.display = 'block'
-        stopUpdate[x].style.display = 'block'
-    })
-})
-
-// // if "stop button is clicked", unhide "update button" and re-hide "stop update" button and form 
-stopUpdate.forEach(function(i, index) {  
-    const x = index
-    i.addEventListener('click', () => {     
-        updateButtons[x].style.display = 'block'
-        hideForm[x].style.display = 'none'
-        stopUpdate[x].style.display = 'none'
-    })
-})
-
-</script>
 
 <p>Add Exercise<p>
 <form action="/muscle/<%= muscle %>/<%= equipment %>/addExercise" method="POST">
     <input type="text" placeholder="Enter exercise here" name="newExercise" required>
     <input type="submit">
 </form>
+
+<script src="/js/exercise.js"></script>
 
 <%- include('partials/footer') %>
