@@ -1,7 +1,9 @@
 <%- include('partials/header') %>
 
 <h1>Equipment</h1>
-<a href="/muscle">Muscle page!</a>
+<a href="/muscle">Return to Muscle page</a>
+
+<div class="equipment-list"></div>
 <p> <%= muscleNameMessage %></p>
 <p>
     <% if (equipment) { %>
@@ -13,5 +15,7 @@
     <% } %> 
     
 </p>
+
+<script src="/js/equipment.js"></script>
 
 <%- include('partials/footer') %>
