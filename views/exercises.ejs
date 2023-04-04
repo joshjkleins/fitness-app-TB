@@ -5,25 +5,7 @@
 <br>
 <br>
 <div class="all-exercises"></div>
-<!-- <% //exerciseNames.forEach(function(i) { %>
-    <li>
-        
-        <%= //i %> 
-        <div class="update-class">
-            <button id="update-button">Update <%= //i %></button>        
-            <button id="stop-update">Stop updating <%= //i %></button>
-            <form  method="post" id="update-form" action="/muscle/<%= //muscle %>/<%= //equipment %>/<%=// i %>/update">
-                <input type="text" placeholder="Update <%= //i %> here" name="update" required>
-                <input type="submit" value="Update <%= //i %>">
-            </form> 
-        </div>
-        <form style='display:inline' id="add-exercise" method='post' action="/muscle/<%= //muscle %>/<%= //equipment %>/<%= //i %>/delete"><input type="submit" value="Delete <%= //i %>"></form>
-        
-    </li>
-    
-<%// }) %> -->
 <br>
-
 <p>Add Exercise<p>
 <form action="/muscle/<%= muscle %>/<%= equipment %>/addExercise" method="POST">
     <input type="text" placeholder="Enter exercise here" name="newExercise" required>
