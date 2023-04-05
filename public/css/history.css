@@ -104,6 +104,9 @@ table {
     border: 2px solid rgb(200,200,200);
     letter-spacing: 1px;
     font-size: 0.8rem;
+    width: 95%;
+    margin: 10px;
+    padding-bottom: 10px;
 }
 
 td, th {
@@ -112,11 +115,32 @@ td, th {
 }
 
 th {
-    background-color: rgb(235,235,235);
+    background-color: rgb(235,235,235); 
 }
+
+
 
 td {
     text-align: center;
+    vertical-align: middle;
+    height: 30px;
+}
+.days-of-week {
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 700;
+}
+
+.shrucken-cell {
+    width: 25%;
+}
+
+.dates {
+    height: 20px;
+}
+
+.data{
+    height: 75px;
 }
 
 tr:nth-child(even) td {
