@@ -3,19 +3,40 @@ const router = express.Router()
 const MongoClient = require('mongodb').MongoClient
 
 router.get('/', function(req, res) {
-    async function getMuscles() {
+    res.render("muscle")
+})
+
+router.get('/get-all-exercises', (req, res) => {
+    async function allExercises() {
         const client = await MongoClient.connect(process.env.MDBURL, { useUnifiedTopology: true })
         console.log('Connected to Database')
         // get correct database and collection
         const dbName = client.db('Fitness')
-        const collection = dbName.collection('Equipment')
-        const result = await collection.find({}).toArray()
-        client.close()
-        res.render("muscle", {
-            muscle: result
+        const collection1 = dbName.collection('Equipment')
+        const resultMuscle = await collection1.find({}).toArray()
+        const justMuscles = resultMuscle.map((m) => {
+            return m.muscle
         })
+        
+        const collection2 = dbName.collection('Exercises')
+        const resultAllExercises = await collection2.find({}).toArray()
+        let listArray = [];
+        resultAllExercises.forEach(function(i) {
+            if (i.exerciseNames.length != 0) {
+                i.exerciseNames.forEach(j => {
+                    listArray.push(`${j} (${i.equipment}, ${i.muscle})`)
+                });
+            }
+        })
+        client.close()
+        const result = {
+            muscle: justMuscles,
+            listArray: listArray
+        }
+        
+        res.send(result)
     }
-    getMuscles()
+    allExercises()
 })
 
 router.get('/getExerciseNames', (req, res) => {
@@ -67,26 +88,20 @@ router.get('/musclelist/:muscle/', (req, res) => {
         const collection = dbName.collection('Exercises')
         const result = await collection.find({muscle: req.params.muscle}).toArray()
         let listArray = [];
-        
-        result.forEach(function(i, index) {
+        result.forEach(function(i) {
             if (i.exerciseNames.length != 0) {
-                listArray.push(`${i.exerciseNames} (${i.equipment})` )
+                i.exerciseNames.forEach(j => {
+                    listArray.push(`${j} (${i.equipment})`)
+                });
             }
         })
-
-        // search in database for all documents that contain the muscle regardless of equipment
-        // multiple the equipment to cover all respective exercises in that array (rdl, barbell; deadlift, barbell; etc.)
-        // combine the exercise arrays into one 
-
-        listArray.forEach(function(i, index) {
-        })
+    
         client.close()
 
         res.render("listByMuscle", {
             muscle: req.params.muscle,
-            muscleList: `You are the viewing the all exercises for ${req.params.muscle}`,
+            muscleList: `You are the viewing all exercises for ${req.params.muscle}`,
             listArray: listArray,
-            equipment: listArray
         })
     }   
     getMuscleList()
@@ -102,16 +117,16 @@ router.get('/equipment/:equipment/list', (req, res) => {
         const collection = dbName.collection('Exercises')
         const result = await collection.find({equipment: req.params.equipment}).toArray()
         const listArray = []
-
-        result.forEach(function(i, index) {
+        result.forEach(function(i) {
             if (i.exerciseNames.length != 0) {
-                listArray.push(i.exerciseNames)
+                i.exerciseNames.forEach(j => {
+                    listArray.push(`${j} (${i.muscle})`)
+                });
             }
         })
-
         res.render("listByEquipment", {
             equipmentList: `You are the viewing the all exercises for ${req.params.equipment}`,
-            list: listArray.flat()
+            listArray: listArray
         })
     }   
     getEquipmentList()

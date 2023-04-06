@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
+const MongoClient = require('mongodb').MongoClient
 require('dotenv').config()
 
 //setting view engine to ejs

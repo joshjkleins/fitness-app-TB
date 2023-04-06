@@ -1,16 +1,14 @@
 <%- include('partials/header') %>
 
-<h2><%= muscleList %></h2>
-<a href="/">Home Page</a>
-<br>
-
 <a href="/muscle">Return to Muscle Page</a>
 <br>
-<br>
-
-
-
-
-<script src="/js/muscle.js"></script>
+<h2><%= muscleList %></h2>
+<ul>
+    <% listArray.forEach(function(i) { %>
+        <li> 
+            <%= i %>
+        </li>
+    <% }); %>   
+</ul>
 
 <%- include('partials/footer') %>
