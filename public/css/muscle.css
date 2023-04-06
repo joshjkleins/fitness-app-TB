@@ -11,7 +11,7 @@
     font-size: 16px;
     border: none;
     cursor: pointer;
-    border-radius: 8px
+    border-radius: 8px;
   }
   
   /* Dropdown button on hover & focus */
@@ -48,3 +48,4 @@
   
   /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
   .show {display:block;}
+  

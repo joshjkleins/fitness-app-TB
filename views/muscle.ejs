@@ -2,39 +2,35 @@
 <link rel="stylesheet" href="/css/muscle.css">
 
 <h1>Muscles!</h1>
-<a href="/">Home Page</a>
 <br>
 <br>
 <div class="buttons">
     <div class="muscleDropdown">
         <button onclick="muscleDropdown()" class="dropbtn">Search By Muscle</button>
         <div id="muscleDropdown" class="dropdown-content">
-            <% muscle.forEach(function(i) { %> 
-                <a href="/muscle/musclelist/<%= i.muscle %>"><%= i.muscle %></a> 
-            <% }); %> 
+            <%// muscle.forEach(function(i) { %> 
+                <a href="/muscle/musclelist/<%//= i.muscle %>"><%//= i.muscle %></a> 
+            <%// }); %> 
         </div>
-    </div>
+</div>
 
-    <div class="equipmentDropdown">
-        <button onclick="equipmentDropdown()" class="dropbtn">Search By Equipment</button>
-        <div id="equipmentDropdown" class="dropdown-content">
-                <a href="/muscle/equipment/barbell/list">Barbell</a> 
-                <a href="/muscle/equipment/dumbbells/list">Dumbbells</a> 
-                <a href="/muscle/equipment/cable/list">Cable</a> 
-                <a href="/muscle/equipment/bodyweight/list">Bodyweight</a> 
-                <a href="/muscle/equipment/machine/list">Machine</a> 
-                <a href="/muscle/equipment/other/list">Other</a> 
-        </div>
+<div class="equipmentDropdown">
+    <button onclick="equipmentDropdown()" class="dropbtn">Search By Equipment</button>
+    <div id="equipmentDropdown" class="dropdown-content">
+            <a href="/muscle/equipment/barbell/list">Barbell</a> 
+            <a href="/muscle/equipment/dumbbells/list">Dumbbells</a> 
+            <a href="/muscle/equipment/cable/list">Cable</a> 
+            <a href="/muscle/equipment/bodyweight/list">Bodyweight</a> 
+            <a href="/muscle/equipment/machine/list">Machine</a> 
+            <a href="/muscle/equipment/other/list">Other</a> 
     </div>
 </div>
-<p>
-    <h3>List of Muscles</h3>
-    <% muscle.forEach(function(i) { %>
-        <li> 
-            <a href="/muscle/<%= i.muscle %>"><%= i.muscle %></a> 
-        </li>
-    <% }); %>   
-</p>
+</div>
+<br>
+<h2>All Exercises</h2>
+<ul id="all-exercise-list">
+    <div class="loader"></div> 
+</ul>
 
 <script src="/js/muscle.js"></script>
 
